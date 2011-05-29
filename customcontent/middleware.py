@@ -11,6 +11,9 @@ class CustomContentMiddleware(object):
             call of it when we already have our item essentially.
         """
         item = CustomContent.find(request)
+        if item is None:
+            return response
+
         head_data = cc_item(item, 'extra_head', 'js', 'css')
         encoded =  response.content.decode('utf-8')
         response.content = re.sub(r'(</head>)', r'%s\1' % head_data, encoded)
