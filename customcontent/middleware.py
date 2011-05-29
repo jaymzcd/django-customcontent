@@ -10,9 +10,10 @@ class CustomContentMiddleware(object):
             change the cc_item as that's doing a hit to the db for each
             call of it when we already have our item essentially.
         """
-        head_data = cc_item(request, 'extra_head', 'js', 'css')
+        item = CustomContent.find(request)
+        head_data = cc_item(item, 'extra_head', 'js', 'css')
         response.content = re.sub(r'(</head>)', r'%s\1' % head_data, response.content)
         # atm do not insert at positions, just append before body close
-        body_data = cc_item(request, 'customitem_set')
+        body_data = cc_item(item, 'customitem_set')
         response.content = re.sub(r'(</body>)', r'%s\1' % body_data, response.content)
         return response
