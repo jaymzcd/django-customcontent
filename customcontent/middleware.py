@@ -12,7 +12,7 @@ class CustomContentMiddleware(object):
         """
         item = CustomContent.find(request)
         head_data = cc_item(item, 'extra_head', 'js', 'css')
-        response.content = re.sub(r'(</head>)', r'%s\1' % head_data, response.content)
+        response.content = re.sub(r'(</head>)', r'%s\1' % head_data, response.content, 0, re.UNICODE)
         # atm do not insert at positions, just append before body close
         body_data = cc_item(item, 'customitem_set')
         response.content = re.sub(r'(</body>)', r'%s\1' % body_data, response.content)
