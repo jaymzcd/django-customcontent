@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
@@ -58,6 +59,12 @@ class CustomContent(models.Model):
             Returns a CustomContent object(s) based on the current request
         """
         path = request.path
+
+        # If we're accessing a media path, ignore straight away
+        # (in middleware you'll get lots of these fired)
+        if settings.MEDIA_URL in path:
+            return None
+
         if request.user.is_authenticated():
             items = CustomContent.objects.all().filter(preview=True)
         else:

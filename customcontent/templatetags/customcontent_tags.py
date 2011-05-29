@@ -1,6 +1,7 @@
 from django import template
 from django.conf import settings
 from customcontent.models import CustomContent, CustomItem
+from customcontent import wrap_strings
 import urlparse
 register = template.Library()
 
@@ -11,12 +12,11 @@ def cc_item(request, *args):
         the stringified (!?) version of the code.
     """
 
-    wrap_strings = {
-        'css': """<style type="text/css">%s</style>""",
-        'js': """<script type="text/javascript">%s</script>""",
-    }
     content_items = CustomContent.find(request)
     content = list()
+
+    if not content_items:
+        return None
 
     for cc in content_items:
         for arg in args:
